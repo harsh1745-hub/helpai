@@ -63,17 +63,24 @@ const Project = () => {
         setMessage("")
     }
 
-    const WriteAiMessage = (message) => {
-        const messageObject = JSON.parse(message)
-        return (
-            <div className='overflow-auto bg-gray-800 text-white rounded-md p-2'>
-                <Markdown
-                    children={messageObject.text}
-                    options={{ overrides: { code: SyntaxHighlightedCode } }}
-                />
-            </div>
-        )
+  const WriteAiMessage = (message) => {
+    let messageObject = { text: "Invalid message format." }
+
+    try {
+        messageObject = JSON.parse(message)
+    } catch (error) {
+        console.error("Failed to parse AI message:", message)
     }
+
+    return (
+        <div className='overflow-auto bg-gray-800 text-white rounded-md p-2'>
+            <Markdown
+                children={messageObject.text}
+                options={{ overrides: { code: SyntaxHighlightedCode } }}
+            />
+        </div>
+    )
+}
 
     const saveFileTree = (ft) => {
         axios.put('/projects/update-file-tree', {
